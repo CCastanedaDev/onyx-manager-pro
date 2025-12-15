@@ -1,79 +1,81 @@
-# VOID SCUM MANAGER (ONYX MANAGER)
+# VOID SCUM MANAGER (ONYX MANAGER) 🛡️
 
-**VOID SCUM MANAGER** es una herramienta administrativa avanzada y completa diseñada para facilitar la instalación, configuración y gestión de servidores dedicados de **SCUM** en entornos Windows. Desarrollada en Python con una interfaz gráfica moderna (CustomTkinter), esta aplicación permite a los administradores de servidores controlar cada aspecto de su servidor sin necesidad de interactuar con scripts de consola complejos o editar manualmente archivos de configuración propensos a errores.
+**VOID SCUM MANAGER** is an advanced and comprehensive administrative tool designed to streamline the installation, configuration, and management of **SCUM** dedicated servers on Windows environments. 
 
-## 🚀 Características Principales
+Developed in Python with a modern graphical interface (CustomTkinter), this application allows server administrators to control every aspect of their server without interacting with complex console scripts or manually editing error-prone configuration files.
 
-### 1. Gestión Automática del Servidor
-*   **Instalación y Actualización Simplificada**: Descarga e instala automáticamente el servidor dedicado de SCUM utilizando SteamCMD integrado. Detecta nuevas versiones y permite actualizar con un solo clic.
-*   **Control Total**: Botones intuitivos para **Iniciar**, **Detener** y **Reiniciar** el servidor.
-*   **Cierre Seguro (Safe Shutdown)**: Implementa un sistema avanzado de cierre que inyecta señales de terminación (Ctrl+C) directamente en el proceso del servidor, garantizando que el servidor guarde la base de datos de jugadores antes de cerrarse, evitando la corrupción de datos y pérdidas de progreso ("rollbacks").
-*   **Watchdog (Guardián)**: Sistema de monitoreo constante que reinicia automáticamente el servidor si detecta que el proceso se ha cerrado inesperadamente (crashes).
+## 🚀 Key Features
 
-### 2. Editor de Configuración Visual
-*   Adiós a la edición manual de `ServerSettings.ini`. El gestor ofrece una interfaz visual organizada por categorías (Mundo, PvP, Vehículos, etc.) para modificar variables del servidor.
-*   **Ajustes Soportados**:
-    *   Multiplicadores de experiencia y daño.
-    *   Configuración de ciclo día/noche.
-    *   Restricciones de construcción y zonas.
-    *   Ajustes de vehículos (consumo de combustible, batería).
-    *   Y mucho más.
+### 1. Automated Server Management
+* **Simplified Installation & Updates**: Automatically downloads and installs the SCUM dedicated server using integrated SteamCMD. Detects new versions and allows one-click updates.
+* **Total Control**: Intuitive buttons to **Start**, **Stop**, and **Restart** the server.
+* **Safe Shutdown (Anti-Corruption)**: Implements an advanced shutdown system that injects termination signals (`CTRL+C`) directly into the server process via Windows API. This ensures the server saves the player database before closing, preventing data corruption and progress rollbacks.
+* **Watchdog**: Constant monitoring system that automatically restarts the server if a crash is detected.
 
-### 3. Programador de Raideos (Raid Scheduler)
-*   Editor gráfico dedicado para el archivo `RaidTimes.json`.
-*   Permite configurar horarios de raideo permitidos para cada día de la semana de forma individual.
-*   Interfaz simple para activar/desactivar días y definir ventanas de tiempo (Ej: "18:00-22:00").
+### 2. Visual Configuration Editor
+* No more manual editing of `ServerSettings.ini`. The manager offers a visual interface organized by categories (World, PvP, Vehicles, etc.) to modify server variables.
+* **Supported Settings**:
+    * Experience and damage multipliers.
+    * Day/night cycle configuration.
+    * Building restrictions and zones.
+    * Vehicle settings (fuel consumption, battery).
+    * And much more.
 
-### 4. Interfaz Moderna y Multi-idioma
-*   **UI Oscura (Dark Mode)**: Diseñada con `customtkinter` para una experiencia visual agradable y moderna.
-*   **Multi-idioma**: Soporte para múltiples idiomas (Español, Inglés, Ruso, etc.), permitiendo cambiar el idioma de la interfaz al instante.
-*   **Consola en Vivo**: Visualización en tiempo real de los logs del servidor y del sistema dentro de la aplicación, facilitando la depuración y el monitoreo.
+### 3. Raid Scheduler
+* Dedicated graphical editor for `RaidTimes.json`.
+* Configure allowed raid schedules for each day of the week individually.
+* Simple interface to toggle days on/off and define time windows (e.g., "18:00-22:00").
 
-### 5. Herramientas Avanzadas
-*   **Gestión de Backups**: Sistema para gestionar copias de seguridad de los datos del servidor.
-*   **Detección de IP**: Utilidad para autodetectar la IP pública del servidor.
-*   **Multi-hilo**: La interfaz no se congela mientras el servidor carga o actualiza gracias al uso de threading.
+### 4. Modern UI & Multi-language
+* **Dark Mode UI**: Designed with `customtkinter` for a pleasant and modern visual experience.
+* **Multi-language**: Support for multiple languages (Spanish, English, Russian, etc.), allowing instant interface language switching.
+* **Live Console**: Real-time visualization of server and system logs within the application, facilitating debugging and monitoring.
 
-## 🛠 Requisitos del Sistema
+### 5. Advanced Tools
+* **Backup Management**: System to manage server data backups.
+* **IP Detection**: Utility to auto-detect the server's public IP.
+* **Multi-threading**: The interface remains responsive while the server loads or updates thanks to threading implementation.
 
-*   **Sistema Operativo**: Windows 10/11 (64-bit).
-*   **Juego**: Licencia de SCUM dedicada (AppID 3792580).
-*   **Conexión a Internet**: Para descargar archivos de SteamCMD y actualizaciones del servidor.
+## 🛠 System Requirements
 
-## 🔧 Instalación y Uso
+* **Operating System**: Windows 10/11 (64-bit).
+* **Game**: SCUM Dedicated Server License (AppID 3792580).
+* **Internet Connection**: Required for downloading SteamCMD files and server updates.
 
-1.  **Descargar**: Obtén la última versión desde la sección de Releases (o clona este repositorio).
-2.  **Ejecutar**: Abre `VOID_MANAGER.exe` (o ejecuta `main.py` si usas el código fuente).
-3.  **Instalar Servidor**: Si es la primera vez, el gestor detectará que falta el servidor y te ofrecerá instalarlo. Haz clic en el botón de instalación/actualización.
-4.  **Configurar**: Ve a la pestaña de ajustes para definir el nombre de tu servidor, contraseña y reglas de juego.
-5.  **Jugar**: Inicia el servidor desde el Dashboard y espera a que aparezca "Server is running".
+## 🔧 Installation & Usage
 
-## 💻 Detalles Técnicos
+1.  **Download**: Get the latest version from the **Releases** section (or clone this repository).
+2.  **Run**: Open `VOID_MANAGER.exe` (or run `main.py` if using source code).
+3.  **Install Server**: If it's the first run, the manager will detect the missing server and offer to install it. Click the Install/Update button.
+4.  **Configure**: Go to the settings tab to define your server name, password, and game rules.
+5.  **Play**: Start the server from the Dashboard and wait for "Server is running".
 
-El proyecto está construido utilizando las siguientes tecnologías:
+## 💻 Technical Details
 
-*   **Lenguaje**: Python 3.x
-*   **GUI**: `customtkinter` (basado en Tkinter).
-*   **Gestión de Procesos**: `psutil`, `subprocess`, `ctypes` (para manejo de señales de Windows).
-*   **Interacción Web**: `requests` (para consultar APIs de Steam).
-*   **Gestión de Datos**: `json` (para persistencia de configuraciones).
-*   **Empaquetado**: PyInstaller e Inno Setup (para crear el instalador .exe).
+The project is built using the following technologies:
+
+* **Language**: Python 3.x
+* **GUI**: `customtkinter` (based on Tkinter).
+* **Process Management**: `psutil`, `subprocess`, `ctypes` (for Windows signal handling).
+* **Web Interaction**: `requests` (to query Steam APIs).
+* **Data Management**: `json` (for configuration persistence).
+* **Packaging**: PyInstaller & Inno Setup (to create the .exe installer).
 
 ---
 
-**Nota**: Este proyecto es una herramienta de terceros y no está afiliada oficialmente con Gamepires ni Jagex.
+**Disclaimer**: This project is a third-party tool and is not officially affiliated with Gamepires or Jagex.
 
-## 📂 Estructura del Proyecto
+## 📂 Project Structure
 
-El proyecto está organizado de la siguiente manera para facilitar su mantenimiento y escalabilidad:
+The project is organized to facilitate maintenance and scalability:
 
-*   `src/`: Contiene todo el código fuente del núcleo de la aplicación.
-    *   `logic/`: Módulos de "backend" que manejan la lógica del servidor, SteamCMD, gestión de archivos, backups, etc.
-    *   `ui/`: Módulos de interfaz gráfica (`customtkinter`), ventanas y componentes visuales.
-*   `data/`: Archivos estáticos y recursos.
-    *   `lang/`: Archivos JSON para el soporte multi-idioma.
-    *   `assets/`: Imágenes, iconos y otros recursos visuales.
-*   `dev_tools/`: Scripts de utilidad para desarrollo y mantenimiento (verificación de sintaxis, restauración, etc.). No son necesarios para el uso normal de la aplicación.
-*   `installer_langs/`: Archivos de traducción para el instalador de Inno Setup.
-*   `main.py`: **Punto de entrada**. Ejecute este archivo para iniciar la aplicación desde el código fuente.
-*   `COMPILAR.bat`: Script por lotes para compilar la aplicación a un ejecutable (.exe).
+* `src/`: Contains all core application source code.
+    * `logic/`: "Backend" modules handling server logic, SteamCMD, file management, backups, etc.
+    * `ui/`: GUI modules (`customtkinter`), windows, and visual components.
+* `data/`: Static files and resources.
+    * `lang/`: JSON files for multi-language support.
+    * `assets/`: Images, icons, and other visual resources.
+* `dev_tools/`: Utility scripts for development and maintenance (syntax checking, restoration, etc.). Not required for normal application usage.
+* `installer_langs/`: Translation files for the Inno Setup installer.
+* `main.py`: **Entry Point**. Run this file to start the application from source.
+* `COMPILAR.bat`: Batch script to compile the application into an executable (.exe).
