@@ -1,0 +1,54 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer
+*.exe
+!Antigravity.exe
+# We might want to keep the final installer if it's small, but usually not in source repo.
+# For this repo, excluding large executables.
+scum_server/
+steamcmd/
+Backups/
+respaldo/
+Instalador_Final/
+
+# Logs
+*.log
+manual_output.txt
+
+# Virtual Env
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project Specific
+void_manager.lock

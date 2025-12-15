@@ -1,0 +1,8 @@
+{
+    "MECH ON": {
+        "scum.DisableSentrySpawning": "0"
+    },
+    "MECH OF": {
+        "scum.DisableSentrySpawning": "1"
+    }
+}

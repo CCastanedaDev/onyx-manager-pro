@@ -1,0 +1,72 @@
+[
+    {
+        "id": "0ab09ff5-0d2c-4248-b413-97dcfcd9be78",
+        "hora": "12:00",
+        "perfil": "MECH ON",
+        "dias": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ]
+    },
+    {
+        "id": "02c38d14-1b5d-4674-a4c5-699d26f0f0ab",
+        "hora": "03:00",
+        "perfil": "MECH OF",
+        "dias": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ]
+    },
+    {
+        "id": "5615b201-5d22-48cd-841c-03e2224cb6c3",
+        "hora": "17:00",
+        "perfil": "RESTART",
+        "dias": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ]
+    },
+    {
+        "id": "9f18c93c-f31d-4567-9122-08ed96026534",
+        "hora": "04:00",
+        "perfil": "BACKUP",
+        "dias": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ]
+    },
+    {
+        "id": "f80d7688-a562-427e-b0fa-c35ad03293af",
+        "hora": "19:08",
+        "perfil": "RESTART",
+        "dias": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+        ]
+    }
+]
