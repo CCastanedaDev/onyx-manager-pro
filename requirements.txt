@@ -1,0 +1,4 @@
+customtkinter
+APScheduler
+paramiko
+requests

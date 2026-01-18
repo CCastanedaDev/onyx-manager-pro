@@ -1,0 +1,34 @@
+# Binary / Build
+build/
+dist/
+*.exe
+*.spec
+__pycache__/
+
+# Dependencies
+scum_server/
+steamcmd/
+python/
+
+# Logs
+*.log
+manual_output.txt
+output.txt
+
+# Local Data (User specific)
+data/tasks.json
+data/profiles.json
+data/gui_settings.json
+void_manager.lock
+verified_files.json
+
+# IDE
+.vscode/
+.idea/
+
+# Archives
+*.zip
+*.rar
+Backups/
+respaldo/
+Iniciando
