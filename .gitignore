@@ -1,12 +1,23 @@
-# Binary / Build
+# Binary / Build / Packages
 build/
 dist/
+Instalador_Final/
 *.exe
 *.spec
 __pycache__/
+*.pyc
 
-# Dependencies
+# Game Servers & Large DB Dumps (DO NOT UPLOAD)
 scum_server/
+SCUM_Server/
+SCUM/
+Saved/
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+
+# Dependencies & Binaries
 steamcmd/
 python/
 
@@ -19,16 +30,22 @@ output.txt
 data/tasks.json
 data/profiles.json
 data/gui_settings.json
+data/users_db.json
+data/schedule.json
 void_manager.lock
 verified_files.json
 
-# IDE
+# IDE & OS
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
 
 # Archives
 *.zip
 *.rar
+*.7z
+*.tar.gz
 Backups/
 respaldo/
-Iniciando
+Iniciando/

@@ -2,14 +2,16 @@ import os
 from src.logic.path_manager import find_server_directory
 
 class AdminManager:
-    def __init__(self, log_callback):
+    def __init__(self, log_callback, base_path=None):
         self.log = log_callback
         self.base_dir = os.getcwd()
-        
-        # Ruta base de configuración
-        server_dir = find_server_directory(self.base_dir)
-        self.config_dir = os.path.join(server_dir, "SCUM", "Saved", "Config", "WindowsServer")
-        
+
+        if base_path and os.path.isdir(base_path):
+            self.config_dir = os.path.join(base_path, "SCUM", "Saved", "Config", "WindowsServer")
+        else:
+            server_dir = find_server_directory(self.base_dir)
+            self.config_dir = os.path.join(server_dir, "SCUM", "Saved", "Config", "WindowsServer")
+
         # Rutas de los archivos
         self.file_main = os.path.join(self.config_dir, "AdminUsers.ini")
         self.file_settings = os.path.join(self.config_dir, "ServerSettingsAdminUsers.ini")

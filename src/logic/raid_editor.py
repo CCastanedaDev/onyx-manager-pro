@@ -5,7 +5,21 @@ class RaidEditor:
     def __init__(self, log_callback, base_path=None):
         self.log = log_callback
         root_dir = base_path if base_path else os.getcwd()
-        self.config_path = os.path.join(root_dir, "scum_server", "SCUM", "Saved", "Config", "WindowsServer", "RaidTimes.json")
+
+        # Intentar resolver la ruta correctamente:
+        # base_path puede ser la raiz de SCUM_Server (tiene SCUM/ dentro)
+        # o puede ser otra carpeta (buscar SCUM_Server/ dentro)
+        candidate_direct = os.path.join(root_dir, "SCUM", "Saved", "Config", "WindowsServer", "RaidTimes.json")
+        candidate_subdir = os.path.join(root_dir, "SCUM_Server", "SCUM", "Saved", "Config", "WindowsServer", "RaidTimes.json")
+
+        if base_path and os.path.isdir(os.path.join(root_dir, "SCUM")):
+            # base_path ES la carpeta SCUM_Server
+            self.config_path = candidate_direct
+        elif os.path.exists(candidate_subdir) or os.path.isdir(os.path.join(root_dir, "SCUM_Server")):
+            self.config_path = candidate_subdir
+        else:
+            # Fallback: mismo comportamiento anterior pero con case correcto
+            self.config_path = candidate_direct
         
         self.days_map = {
             "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday": "Wednesday",

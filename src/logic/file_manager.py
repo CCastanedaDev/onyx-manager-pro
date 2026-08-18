@@ -1,13 +1,17 @@
 import os
 
 class FileManager:
-    def __init__(self, log_callback):
+    def __init__(self, log_callback, base_path=None):
         self.log = log_callback
-        self.base_dir = os.getcwd()
-        # Path to SCUM config: SCUM_Server/SCUM/Saved/Config/WindowsServer
-        # Adjusting based on project structure where SCUM_Server is in root
-        self.root_path = os.path.join(self.base_dir, "SCUM_Server", "SCUM", "Saved", "Config", "WindowsServer")
-        
+        root = base_path if base_path else os.getcwd()
+        # Si base_path ya es la carpeta SCUM_Server, usarla directamente
+        # Si no, buscar SCUM_Server dentro de ella
+        candidate = os.path.join(root, "SCUM", "Saved", "Config", "WindowsServer")
+        if os.path.isdir(candidate):
+            self.root_path = candidate
+        else:
+            self.root_path = os.path.join(root, "SCUM_Server", "SCUM", "Saved", "Config", "WindowsServer")
+
         # Ensure directory exists to avoid errors if server not installed yet
         if not os.path.exists(self.root_path):
             try:

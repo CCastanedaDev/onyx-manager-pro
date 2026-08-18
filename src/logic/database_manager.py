@@ -11,7 +11,10 @@ class DatabaseManager:
         self.base_dir = os.getcwd()
         
     def get_db_path(self):
-        server_dir = find_server_directory(self.base_dir)
+        if hasattr(self, 'steam') and self.steam and hasattr(self.steam, 'server_install_dir') and self.steam.server_install_dir:
+            server_dir = self.steam.server_install_dir
+        else:
+            server_dir = find_server_directory(self.base_dir)
         # La ruta típica es SCUM/Saved/SaveFiles/SCUM.db
         return os.path.join(server_dir, "SCUM", "Saved", "SaveFiles", "SCUM.db")
 

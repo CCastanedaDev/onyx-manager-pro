@@ -2,26 +2,31 @@ import os
 
 def find_server_directory(base_path=None):
     """
-    Busca la carpeta SCUM_Server en:
-    1. Dentro del directorio actual (Portable/Default)
-    2. En el directorio hermano (Sibling - para actualizaciones seguras)
-    
-    Retorna la ruta absoluta encontrada o la ruta por defecto (interna).
+    Busca la carpeta SCUM_Server en (en orden de prioridad):
+    1. Carpeta del .exe  (ONYX_EXE_DIR) – para modo onefile
+    2. Dentro de base_path
+    3. Hermano de base_path (../SCUM_Server)
+
+    Retorna la ruta absoluta encontrada o la ruta por defecto.
     """
     if base_path is None:
         base_path = os.getcwd()
-        
-    # 1. Check Internal (Default)
-    internal_path = os.path.join(base_path, "SCUM_Server")
-    if os.path.exists(internal_path):
-        return internal_path
-        
-    # 2. Check Sibling (../SCUM_Server)
-    # Subimos un nivel desde base_path
+
+    # Colectar directorios candidatos (sin duplicados)
+    candidates = []
+    exe_dir = os.environ.get("ONYX_EXE_DIR")
+    if exe_dir:
+        candidates.append(exe_dir)
+    candidates.append(base_path)
     parent_dir = os.path.dirname(base_path)
-    sibling_path = os.path.join(parent_dir, "SCUM_Server")
-    if os.path.exists(sibling_path):
-        return sibling_path
-        
-    # Default: Return internal path so it gets created there if installed fresh
-    return internal_path
+    if parent_dir and parent_dir not in candidates:
+        candidates.append(parent_dir)
+
+    for d in candidates:
+        p = os.path.join(d, "SCUM_Server")
+        if os.path.isdir(p):
+            return p
+
+    # Default: junto al .exe o dentro de base_path
+    default_root = exe_dir if exe_dir else base_path
+    return os.path.join(default_root, "SCUM_Server")

@@ -5,25 +5,35 @@ from datetime import timedelta
 from src.logic.path_manager import find_server_directory
 
 class UserManager:
-    def __init__(self, log_callback):
+    def __init__(self, log_callback, base_path=None):
         self.log = log_callback
         self.base_dir = os.getcwd()
-        self.users_db_file = os.path.join("data", "users_db.json")
-        
+        # En modo .exe, users_db.json va en ONYX_APPDATA_DIR para no quedar dentro del bundle
+        _appdata = os.environ.get("ONYX_APPDATA_DIR")
+        _data_base = _appdata if _appdata else self.base_dir
+        self.users_db_file = os.path.join(_data_base, "data", "users_db.json")
+
         # Rutas a los archivos reales del servidor
-        server_dir = find_server_directory(self.base_dir)
-        self.config_dir = os.path.join(server_dir, "SCUM", "Saved", "Config", "WindowsServer")
-        self.ban_file = os.path.join(self.config_dir, "Ban.txt")
-        self.whitelist_file = os.path.join(self.config_dir, "Whitelist.txt")
-        
+        if base_path and os.path.isdir(base_path):
+            # base_path ya es la carpeta SCUM_Server
+            self.config_dir = os.path.join(base_path, "SCUM", "Saved", "Config", "WindowsServer")
+        else:
+            server_dir = find_server_directory(self.base_dir)
+            self.config_dir = os.path.join(server_dir, "SCUM", "Saved", "Config", "WindowsServer")
+
+        # Archivos reales del servidor SCUM
+        self.ban_file       = os.path.join(self.config_dir, "BannedUsers.ini")
+        self.whitelist_file = os.path.join(self.config_dir, "WhitelistedUsers.ini")
+
         # Cargar base de datos de tiempos
         self.db = self.cargar_db()
-        
+
         # Sincronizar con archivos existentes (Importar bans/whitelist viejos)
         self.sincronizar_con_archivos()
 
     def sincronizar_con_archivos(self):
-        """Lee Ban.txt y Whitelist.txt y sincroniza la DB interna (altas y bajas)"""
+        """Lee BannedUsers.ini y WhitelistedUsers.ini y sincroniza la DB interna (altas y bajas)"""
+
         self.sincronizar_tipo_desde_txt("BAN", self.ban_file)
         self.sincronizar_tipo_desde_txt("VIP", self.whitelist_file)
 
@@ -157,4 +167,5 @@ class UserManager:
         return []
 
     def guardar_db(self):
+        os.makedirs(os.path.dirname(self.users_db_file), exist_ok=True)
         with open(self.users_db_file, 'w') as f: json.dump(self.db, f, indent=4)

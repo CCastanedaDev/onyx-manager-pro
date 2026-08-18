@@ -1,80 +1,133 @@
 import customtkinter as ctk
-from src.ui.main_window import VoidWindow
 import os
 import sys
 import shutil
-import atexit
+import traceback
 
-# Configuración Global de CustomTkinter
+# ── Configuración Global de CustomTkinter ─────────────────────────────────────
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("dark-blue")
 
-LOCK_FILE = "void_manager.lock"
+# ── Directorio de datos del usuario ───────────────────────────────────────────
+# %APPDATA%\OnyxManager\   →  config persistente, invisible para el usuario
+APPDATA_DIR = os.path.join(
+    os.environ.get("APPDATA", os.path.expanduser("~")), "OnyxManager"
+)
 
-def check_singleton():
-    if os.path.exists(LOCK_FILE):
-        try:
-            with open(LOCK_FILE, 'r') as f:
-                pid = int(f.read().strip())
-            # Check if process is actually running
-            import psutil
-            if psutil.pid_exists(pid):
-                print(f"⚠ YA ESTÁ EN EJECUCIÓN (PID: {pid}). Cerrando esta instancia.")
-                # Opcional: Podrías intentar traer la ventana al frente aquí si tuvieras el handle
-                sys.exit(0)
-        except Exception:
-            # Si el archivo está corrupto o no se puede leer, asumimos que no corre y lo sobreescribimos
-            pass
-            
-    # Create lock file
-    with open(LOCK_FILE, 'w') as f:
-        f.write(str(os.getpid()))
-        
-    atexit.register(lambda: os.remove(LOCK_FILE) if os.path.exists(LOCK_FILE) else None)
 
-def ensure_persistence():
-    """
-    Si corre en modo 'frozen' (PyInstaller OneFile), verifica si las carpetas
-    críticas (data, steamcmd, etc.) existen al lado del .exe.
-    Si no existen, las extrae del bundle (_MEIPASS).
-    Esto garantiza que los datos se guarden fuera del temp y persistan.
-    """
+def get_bundle_dir():
+    """Assets de solo lectura: dentro del bundle _MEIPASS (onefile) o carpeta del script."""
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        bundle_dir = sys._MEIPASS
-        # En OneFile, sys.executable es la ruta al .exe, no al python interpreter
-        exe_dir = os.path.dirname(sys.executable)
-        
-        # Lista de carpetas a persistir
-        folders_to_check = ["data", "steamcmd", "installer_langs", "favicon_io"]
-        
-        print(f"--- VERIFICANDO PERSISTENCIA ---")
-        print(f"Ubicación del Ejecutable: {exe_dir}")
-        print(f"Ubicación del Bundle: {bundle_dir}")
-        
-        for folder in folders_to_check:
-            target_path = os.path.join(exe_dir, folder)
-            source_path = os.path.join(bundle_dir, folder)
-            
-            if not os.path.exists(target_path):
-                print(f">> 📦 Primera ejecución detectada. Extrayendo: {folder} ...")
-                try:
-                    if os.path.exists(source_path):
-                        shutil.copytree(source_path, target_path)
-                        print("   ✅ Extraído correctamente.")
-                    else:
-                        print(f"   ⚠️ No se encontró '{folder}' dentro del ejecutable.")
-                except Exception as e:
-                    print(f"   ❌ Error copiando {folder}: {e}")
+        return sys._MEIPASS
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def get_exe_dir():
+    """Carpeta real del .exe (o del script en desarrollo)."""
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def setup_appdata():
+    """
+    Crea %APPDATA%\\OnyxManager\\data\\ con la MISMA estructura que el proyecto:
+        data/
+          gui_settings.json
+          profiles.json
+          schedule.json
+          users_db.json
+          lang/
+            es.json  en.json  ...
+
+    De esta forma todos los open("data/xxx.json") del código siguen funcionando
+    sin cambios: CWD apuntará a APPDATA_DIR y data/ estará dentro.
+    """
+    data_dir = os.path.join(APPDATA_DIR, "data")
+    os.makedirs(data_dir, exist_ok=True)
+
+    bundle = get_bundle_dir()
+    bundle_data = os.path.join(bundle, "data")
+
+    # ── Archivos de configuración (escribibles) ────────────────────────────────
+    config_files = ["gui_settings.json", "profiles.json", "schedule.json", "users_db.json"]
+    for fname in config_files:
+        dst = os.path.join(data_dir, fname)
+        if not os.path.exists(dst):
+            src = os.path.join(bundle_data, fname)
+            if os.path.exists(src):
+                shutil.copy2(src, dst)
             else:
-                print(f"   ✅ {folder} verificado (Ya existe).")
-        print("--------------------------------")
+                # Crear vacío / default
+                defaults = {
+                    "gui_settings.json": {
+                        "ip": "",
+                        "port": "7777",
+                        "query": "27015",
+                        "name": "My SCUM Server",
+                        "welcome": "Welcome!",
+                        "motd": "",
+                        "pass": "",
+                        "players": "64",
+                        "auto_update": 0,
+                        "lang": "es",
+                        "steam_api_key": "",
+                        "watchdog_enabled": 0,
+                        "nobattleye": 0
+                    },
+                    "profiles.json": [],
+                    "schedule.json": [],
+                    "users_db.json": [],
+                }
+                import json
+                with open(dst, "w", encoding="utf-8") as f:
+                    json.dump(defaults.get(fname, {}), f, indent=2, ensure_ascii=False)
+
+    # ── Carpeta lang (solo lectura — se copia del bundle una sola vez) ─────────
+    lang_dst = os.path.join(data_dir, "lang")
+    if not os.path.exists(lang_dst):
+        lang_src = os.path.join(bundle_data, "lang")
+        if os.path.exists(lang_src):
+            shutil.copytree(lang_src, lang_dst)
+
+
+def set_env_vars():
+    """Expone rutas clave como variables de entorno para todos los módulos."""
+    os.environ["ONYX_EXE_DIR"]     = get_exe_dir()
+    os.environ["ONYX_BUNDLE_DIR"]  = get_bundle_dir()
+    os.environ["ONYX_APPDATA_DIR"] = APPDATA_DIR
+
 
 def main():
-    ensure_persistence()
-    # check_singleton() -> Desactivado para permitir múltiples instancias
-    print(">> Iniciando VOID SCUM SERVER MANAGER (Multi-Instance)...")
+    # 1. Preparar datos en AppData (misma estructura que el proyecto)
+    setup_appdata()
+
+    # 2. Fijar CWD = AppData → open("data/xxx.json") funciona sin tocar nada más
+    os.chdir(APPDATA_DIR)
+
+    # 3. Variables de entorno para steam_handler y otros módulos
+    set_env_vars()
+
+    # 4. Lanzar UI
+    from src.ui.main_window import VoidWindow
     app = VoidWindow()
     app.mainloop()
 
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        os.makedirs(APPDATA_DIR, exist_ok=True)
+        log_path = os.path.join(APPDATA_DIR, "error_log.txt")
+        with open(log_path, "w", encoding="utf-8") as f:
+            f.write(traceback.format_exc())
+        try:
+            import tkinter.messagebox as mb
+            mb.showerror(
+                "ONYX MANAGER - Error al iniciar",
+                f"El programa encontro un error.\n\nLog en:\n{log_path}"
+            )
+        except Exception:
+            pass
+        sys.exit(1)

@@ -20,13 +20,13 @@ DefaultDirName={sd}\OnyxManagerPRO
 
 DisableProgramGroupPage=yes
 PrivilegesRequired=admin
-OutputDir=C:\Users\stink\Desktop\VOID_SCUM_MANAGER\Instalador_Final
+OutputDir=Instalador_Final
 OutputBaseFilename=Instalar_Onyx_Manager_PRO_v1.0
 
 ; --- ESTÉTICA ONYX ---
-SetupIconFile=C:\Users\stink\Desktop\VOID_SCUM_MANAGER\favicon_io\favicon.ico
-WizardImageFile=C:\Users\stink\Desktop\VOID_SCUM_MANAGER\favicon_io\onyx_side.bmp
-WizardSmallImageFile=C:\Users\stink\Desktop\VOID_SCUM_MANAGER\favicon_io\onyx_small.bmp
+SetupIconFile=favicon_io\favicon.ico
+WizardImageFile=favicon_io\onyx_side.bmp
+WizardSmallImageFile=favicon_io\onyx_small.bmp
 WizardStyle=modern
 
 Compression=lzma
@@ -42,7 +42,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 ; Nota: La ruta "Source" es de donde toma los archivos TU PC (puede tener espacios).
 ; "DestDir" es donde se instalan (ahora sin espacios gracias a DefaultDirName).
-Source: "C:\Users\stink\Desktop\VOID_SCUM_MANAGER\dist\ONYX MANAGER\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\ONYX MANAGER\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\favicon_io\favicon.ico"
